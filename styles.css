@@ -1,0 +1,117 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* Light background color */
+    color: #333; /* Dark text color for better readability */
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+#dashboard, #spell-check, #summary, #loading, #match-container {
+    display: none; /* Hide sections by default */
+}
+
+#word-input {
+    text-align: left;
+}
+
+#word-list, #definition-list {
+    max-height: 300px; /* Limit height of the word and definition lists */
+    overflow-y: auto; /* Enable scrolling for overflow */
+}
+
+#feedback {
+    margin-top: 10px;
+}
+
+.correct {
+    color: green; /* Green for correct letters */
+}
+
+.incorrect {
+    color: red; /* Red for incorrect letters */
+}
+
+#summary {
+    text-align: left; /* Left justify the summary page */
+}
+
+#stats {
+    margin-top: 10px; /* Add space above stats */
+}
+
+#loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    z-index: 1000; /* Ensure it appears above other content */
+    text-align: center;
+    padding-top: 20%;
+}
+
+.loading-container {
+    display: inline-block;
+    text-align: center;
+}
+
+.progress {
+    width: 50%;
+    margin: 20px auto;
+}
+
+.progress-bar {
+    background-color: #007bff;
+    height: 25px;
+}
+
+/* Styles for the drag-and-drop word to definition matching */
+#word-list, #definition-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.draggable-word {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: move;
+    text-align: center;
+    font-size: 16px;
+}
+
+.drop-target {
+    padding: 10px;
+    background-color: #e0e0e0;
+    border: 2px dashed #ccc;
+    min-height: 40px;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* Styling for correct and incorrect matches */
+.draggable-word[draggable="false"] {
+    opacity: 0.5; /* Fade once dropped */
+}
+
+.draggable-word.correct {
+    background-color: lightgreen;
+    cursor: not-allowed;
+}
+
+.drop-target.correct {
+    background-color: lightgreen;
+}
+
+.draggable-word.incorrect {
+    background-color: salmon;
+    cursor: not-allowed;
+}
+
+.drop-target.incorrect {
+    background-color: salmon;
+}
