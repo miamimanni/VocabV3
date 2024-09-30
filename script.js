@@ -10,7 +10,7 @@ let matchResults = [];
 let hardMode = false;
 let voices = [];
 let selectedVoice = null;
-const googleApiURL = 'https://script.google.com/macros/s/AKfycbwywcIf1LsfNLIGCqwRhomokYyaYq6nPiiG5AeESrT7mW3mPRN32N9UNBgJ3gaNkKwg/exec';
+const googleApiURL = 'https://script.google.com/macros/s/AKfycbzZ-Nx4rizxkorJ2YKJu8vIEoK8v0dkeh-ZsN9IZZJfXsnktfhoKxmOn9uCalGY6iuc/exec';
 
 function populateVoiceList() {
     voices = speechSynthesis.getVoices();
@@ -57,7 +57,7 @@ function showDashboard() {
         const checked = selectedWords.includes(word);
         label.innerHTML = `<input type="checkbox" id="word-${index}" ${checked ? 'checked' : ''}> ${word}`;
         wordList.appendChild(label);
-        wordList.appendChild(document.createElement('br'));
+        // wordList.appendChild(document.createElement('br'));
     });
 
     document.getElementById('hard-mode').checked = hardMode;
@@ -237,13 +237,17 @@ function hideLoading() {
     document.getElementById('loading').style.display = 'none';
 }
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+}
+
 // Matching phase for drag-and-drop word to definition
 function showMatchingPhase() {
     const matchContainer = document.getElementById('match-container');
-    // matchContainer.innerHTML = '';
 
-    // const wordList = document.createElement('div');
-    // wordList.id = 'word-list';
     const wordList = document.getElementById('match-word-list');
     wordList.innerHTML = '';
 
@@ -266,11 +270,13 @@ function showMatchingPhase() {
         wordList.appendChild(wordDiv);
     });
 
-    // const definitionList = document.createElement('div');
-    // definitionList.id = 'definition-list';
     const definitionList = document.getElementById('match-definition-list');
     definitionList.innerHTML = '';
-    selectedDefinitions.forEach((definition, index) => {
+    let newSelectedDefinitions = selectedDefinitions.map((definition, index) => {
+        return { definition: definition, index: index };
+    });
+    shuffleArray(newSelectedDefinitions);
+    newSelectedDefinitions.forEach(({ definition, index }) => {
         const defDiv = document.createElement('div');
         defDiv.innerText = definition;
         defDiv.className = 'drop-target';
@@ -282,8 +288,6 @@ function showMatchingPhase() {
         definitionList.appendChild(defDiv);
     });
 
-    // matchContainer.appendChild(wordList);
-    // matchContainer.appendChild(definitionList);
     document.getElementById('spell-check').style.display = 'none';
     matchContainer.style.display = 'block';
 }
@@ -331,22 +335,6 @@ function touchEnd(event) {
     draggedElement.style.opacity = '1'; // Reset visual feedback
     draggedElement = null;
 }
-
-// function touchEnd(event) {
-//     // Identify the drop target based on touch location
-//     const touch = event.changedTouches[0];
-//     const dropTarget = document.elementFromPoint(touch.clientX-10, touch.clientY);
-
-//     // Check if the drop target is a valid definition
-//     if (dropTarget && dropTarget.classList.contains('drop-target')) {
-//         dropWord({ target: dropTarget });
-//     }
-
-//     // Reset the dragged element's position
-//     draggedElement.style.position = 'static';
-//     draggedElement.style.opacity = '1'; // Reset visual feedback
-//     draggedElement = null;
-// }
 
 function dragStart(event) {
     event.dataTransfer.setData('text', event.target.id);
@@ -453,7 +441,7 @@ function showFinalSummary() {
         Total: totalQuestions,
         Mode: mode,
         Results: results,
-        MatchResults: matchingResults
+        MatchResults: matchResults
     };
 
     // Create a summary statistics div
@@ -532,10 +520,9 @@ function initialPopulateWords(){
     // let wordsOnly = parsedwordsAndDefinitions.map(wordsAndDef => wordsAndDef.word);
     let wordsAndDefs = parsedwordsAndDefinitions.map(wordsAndDef => `${wordsAndDef.word}|${wordsAndDef.definition}`)
     document.getElementById('words').innerHTML = wordsAndDefs.join("\n");
+    setTimeout(hideLoading, 2000);
 }
-
-initialPopulateWords();
 
 showLoading()
 
-setTimeout(hideLoading, 1000);
+initialPopulateWords();

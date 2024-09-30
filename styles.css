@@ -4,6 +4,10 @@ body {
     color: #333; /* Dark text color for better readability */
 }
 
+label {
+    margin-bottom: 0;
+}
+
 h1, h2 {
     text-align: center;
 }
