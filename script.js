@@ -27,7 +27,10 @@ function populateVoiceList() {
 
     let defaultVoiceIndex = voices.findIndex(voice => voice.name.toLowerCase().includes('samantha'));
     if (defaultVoiceIndex === -1) {
-        defaultVoiceIndex = 0;
+        defaultVoiceIndex = voices.findIndex(voice => voice.name.toLowerCase().includes('kathy'));
+        if (defaultVoiceIndex === -1) {
+            defaultVoiceIndex = 0;
+        }
     }
     voiceSelect.selectedIndex = defaultVoiceIndex;
     selectedVoice = voices[defaultVoiceIndex];
