@@ -10,7 +10,7 @@ let matchResults = [];
 let hardMode = false;
 let voices = [];
 let selectedVoice = null;
-const googleApiURL = 'https://script.google.com/macros/s/AKfycbz-0s7Nc_pHinzGKmQ2ciZS-DioOas55Q8Dwb2Ey6trP9DfoCYNkOD6B9aQDVKfX_sI/exec';
+const googleApiURL = 'https://script.google.com/macros/s/AKfycbwywcIf1LsfNLIGCqwRhomokYyaYq6nPiiG5AeESrT7mW3mPRN32N9UNBgJ3gaNkKwg/exec';
 
 function populateVoiceList() {
     voices = speechSynthesis.getVoices();
