@@ -119,3 +119,34 @@ h1, h2 {
 .drop-target.incorrect {
     background-color: salmon;
 }
+
+.tap-word, .tap-definition {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.tap-word.correct, .tap-definition.correct {
+    background-color: lightgreen;
+    pointer-events: none; /* Disable further clicks */
+    opacity: 0.5; /* Fade out */
+}
+
+.tap-word.incorrect, .tap-definition.incorrect {
+    background-color: salmon;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.tap-word[style="pointer-events: none;"], .tap-definition[style="pointer-events: none;"] {
+    cursor: not-allowed;
+}
+
+.tap-word[style="background-color: yellow;"] {
+    background-color: yellow !important;
+    pointer-events: auto;
+}

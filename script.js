@@ -9,7 +9,10 @@ let results = [];
 let matchResults = [];
 let hardMode = false;
 let voices = [];
+// Touch event handlers for mobile
+let draggedElement = null;
 let selectedVoice = null;
+let selectedWordIndex = null; // Keep track of the currently selected word
 const googleApiURL = 'https://script.google.com/macros/s/AKfycbzZ-Nx4rizxkorJ2YKJu8vIEoK8v0dkeh-ZsN9IZZJfXsnktfhoKxmOn9uCalGY6iuc/exec';
 
 function populateVoiceList() {
@@ -257,19 +260,13 @@ function showMatchingPhase() {
     selectedWords.forEach((word, index) => {
         const wordDiv = document.createElement('div');
         wordDiv.innerText = word;
-        wordDiv.className = 'draggable-word';
-        wordDiv.setAttribute('draggable', 'true');
-        wordDiv.id = `draggableWord-${index}`;
-        wordDiv.style.pointerEvents = 'auto'
+        wordDiv.className = 'tap-word';
+        wordDiv.id = `tapWord-${index}`;
+        wordDiv.style.pointerEvents = 'auto';
 
-        // Add drag event listeners for desktop
-        wordDiv.addEventListener('dragstart', dragStart);
-        
-        // Add touch event listeners for mobile
-        wordDiv.addEventListener('touchstart', touchStart);
-        wordDiv.addEventListener('touchmove', touchMove);
-        wordDiv.addEventListener('touchend', touchEnd);
-        
+        // Add click event listener for word selection
+        wordDiv.addEventListener('click', () => selectWord(index));
+
         wordList.appendChild(wordDiv);
     });
 
@@ -282,12 +279,12 @@ function showMatchingPhase() {
     newSelectedDefinitions.forEach(({ definition, index }) => {
         const defDiv = document.createElement('div');
         defDiv.innerText = definition;
-        defDiv.className = 'drop-target';
+        defDiv.className = 'tap-definition';
         defDiv.id = `definition-${index}`;
 
-        // Add drop event listeners for desktop
-        defDiv.addEventListener('dragover', allowDrop);
-        defDiv.addEventListener('drop', dropWord);
+        // Add click event listener for definition selection
+        defDiv.addEventListener('click', () => selectDefinition(index));
+
         definitionList.appendChild(defDiv);
     });
 
@@ -295,8 +292,65 @@ function showMatchingPhase() {
     matchContainer.style.display = 'block';
 }
 
-// Touch event handlers for mobile
-let draggedElement = null;
+// Function to handle word selection
+function selectWord(index) {
+    // Deselect any previously selected word
+    if (selectedWordIndex !== null) {
+        document.getElementById(`tapWord-${selectedWordIndex}`).style.backgroundColor = '';
+    }
+
+    // Set the new selected word and highlight it
+    selectedWordIndex = index;
+    document.getElementById(`tapWord-${index}`).style.backgroundColor = 'yellow';
+}
+
+// Function to handle definition selection
+function selectDefinition(defIndex) {
+    if (selectedWordIndex === null) return; // No word is selected
+
+    const correctDefIndex = selectedWordIndex;
+    const selectedWordDiv = document.getElementById(`tapWord-${selectedWordIndex}`);
+    const selectedDefDiv = document.getElementById(`definition-${defIndex}`);
+    const correctDefDiv = document.getElementById(`definition-${correctDefIndex}`);
+
+    if (defIndex === correctDefIndex) {
+        // Correct match
+        selectedWordDiv.className = 'tap-word correct';
+        selectedDefDiv.className = 'tap-definition correct';
+        matchResults.push({
+            word: selectedWords[selectedWordIndex],
+            correct: true,
+            selectedDefinition: selectedDefinitions[defIndex],
+            correctDefinition: selectedDefinitions[correctDefIndex]
+        });
+    } else {
+        // Incorrect match
+        selectedWordDiv.className = 'tap-word incorrect';
+        correctDefDiv.className = 'tap-definition incorrect';
+        matchResults.push({
+            word: selectedWords[selectedWordIndex],
+            correct: false,
+            selectedDefinition: selectedDefinitions[defIndex], // Incorrect definition
+            correctDefinition: selectedDefinitions[correctDefIndex]  // Correct definition
+        });
+    }
+
+    // Disable further interaction for this word and its correct definition
+    selectedWordDiv.style.backgroundColor = ''
+    selectedWordDiv.style.pointerEvents = 'none';
+    correctDefDiv.style.pointerEvents = 'none';
+
+    selectedWordDiv.style.opacity = '0.5';
+    correctDefDiv.style.opacity = '0.5';
+
+    // Reset selectedWordIndex
+    selectedWordIndex = null;
+
+    // Check if all matches have been made
+    if (matchResults.length >= selectedWords.length) {
+        showFinalSummary(); // Call the final summary function when all words are matched
+    }
+}
 
 function touchStart(event) {
     draggedElement = event.target;
