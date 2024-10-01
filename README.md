@@ -3,6 +3,8 @@
 This is a web-based spelling practice application designed to help users improve their spelling skills by allowing them to input words and definitions, practice spelling them, and match words to their corresponding definitions.
 Useable site is accessible here https://miamimanni.github.io/VocabV3/
 
+Please note this is for my little one. I understand curiosity. However, I implore you to fork the project and deploy it on your own account with a different google app script url if you want to play with it.
+
 ## Features
 
 - **Word Input**: Users can input words and their definitions in a `word | definition` format.
