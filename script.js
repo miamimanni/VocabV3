@@ -13,7 +13,7 @@ let voices = [];
 let draggedElement = null;
 let selectedVoice = null;
 let selectedWordIndex = null; // Keep track of the currently selected word
-const googleApiURL = 'https://script.google.com/macros/s/AKfycbzZ-Nx4rizxkorJ2YKJu8vIEoK8v0dkeh-ZsN9IZZJfXsnktfhoKxmOn9uCalGY6iuc/exec';
+const googleApiURL = 'https://script.google.com/macros/s/AKfycbywrNskKJ5RfPT2Au_FrIN-XvztVIY893NFcqnqQ1DAS3fPe0nKdyhAvQ4K6YW0pSRz/exec';
 
 function populateVoiceList() {
     voices = speechSynthesis.getVoices();
