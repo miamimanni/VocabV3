@@ -17,7 +17,7 @@ const googleApiURL = 'https://script.google.com/macros/s/AKfycbywrNskKJ5RfPT2Au_
 
 function populateVoiceList() {
     voices = speechSynthesis.getVoices();
-    // voices = voices.filter(voice => voice.lang.toLowerCase().includes('en'));
+    voices = voices.filter(voice => voice.lang.toLowerCase().includes('en'));
     const voiceSelect = document.getElementById('voice-selection');
     voiceSelect.innerHTML = '';
 
