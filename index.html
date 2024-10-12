@@ -90,4 +90,38 @@ gtag('js', new Date());
 
 gtag('config', 'G-KFS0WN24DT');
 </script>
+<script>
+  function updateVoicesInDebugContainer() {
+    const voices = speechSynthesis.getVoices();
+    
+    // Convert each SpeechSynthesisVoice object, adding both the fields you're interested in and any extra fields
+    const voicesData = voices.map(voice => {
+      let voiceObj = {
+        default: voice.default,
+        lang: voice.lang,
+        localService: voice.localService,
+        name: voice.name,
+        voiceURI: voice.voiceURI
+      };
+      
+      // Add any other keys dynamically
+      Object.keys(voice).forEach(key => {
+        if (!voiceObj.hasOwnProperty(key)) {  // Check if key is not already added
+          voiceObj[key] = voice[key];
+        }
+      });
+      
+      return voiceObj;
+    });
+    
+    // Convert the array to a JSON string with indentation for readability
+    const voicesJSON = JSON.stringify(voicesData, null, 2);
+    
+    // Update the content of the debug-container div with the JSON data
+    document.getElementById('debug-container').textContent = voicesJSON;
+  }
+
+  // Ensure voices are loaded properly before updating the container
+  window.speechSynthesis.onvoiceschanged = updateVoicesInDebugContainer;
+</script>
 </html>
